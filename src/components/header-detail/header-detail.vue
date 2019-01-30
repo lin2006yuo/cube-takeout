@@ -1,0 +1,150 @@
+<template>
+  <transition name="fade">
+    <div class="detail" v-show="visible">
+      <div class="detail-wrapper clearfix">
+        <div class="detail-main">
+          <h1 class="name">
+            {{seller.name}}
+          </h1>
+          <div class="star-wrapper">
+            <v-star :score="seller.score" :size="48"></v-star>
+          </div>
+          <div class="info">
+            <div class="line"></div>
+            <div class="text">优惠信息</div>
+            <div class="line"></div>
+          </div>
+          <ul v-if="seller.supports" class="supports">
+            <li class="support-item" v-for="(item,index) in seller.supports" :key="index">
+              <support-ico class="icon" :size=2 :type="seller.supports[index].type"></support-ico>
+              <span class="text">{{seller.supports[index].description}}</span>
+            </li>
+          </ul>
+          <div class="info">
+            <div class="line"></div>
+            <div class="text">商家公告</div>
+            <div class="line"></div>
+          </div>
+          <div class="bulletin">
+            <div class="content">{{seller.bulletin}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="detail-close" @click="hide">
+        <i class="icon-close"></i>
+      </div>
+    </div>
+  </transition>
+</template>
+
+<script type="text/ecmascript-6">
+  import VStar from 'components/star/star';
+  import SupportIco from 'components/support-ico/support-ico';
+
+  export default {
+    name: 'header-detail',
+    components: {
+      SupportIco, VStar
+    },
+    props: {
+      seller: {
+        type: Object,
+        default() {
+          return {};
+        }
+      }
+    },
+    data() {
+      return {
+        visible: false
+      };
+    },
+    methods: {
+      hide() {
+        this.visible = false;
+      },
+      show() {
+        this.visible = true;
+      }
+    }
+  };
+</script>
+
+<style lang="stylus" rel="stylesheet/stylus">
+  @import "~common/stylus/variable"
+
+  .detail
+    &.fade-enter-active, &.fade-leave-active
+      transition: all .5s
+    &.fade-enter, &.fade-leave-to
+      opacity: 0
+    position: fixed
+    z-index: 100
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    overflow: auto
+    color: $color-white
+    backdrop-filter: blur(10px)
+    background: $color-background-s
+    .detail-wrapper
+      width: 100%
+      min-height: 100%
+      .detail-main
+        margin-top: 64px
+        padding-bottom: 64px
+        .name
+          text-align: center
+          line-height: $fontsize-large
+          font-weight: 700
+          font-size: $fontsize-large
+        .star-wrapper
+          text-align: center
+          margin: 16px 0 28px 0
+        .info
+          display: flex
+          width: 80%
+          margin: 0 auto 24px auto
+          .text
+            padding: 0 12px
+            font-size: $fontsize-medium
+            font-weight: 700
+          .line
+            flex: 1
+            height: 2px
+            position: relative
+            top: 6px
+            background: $color-background-sss
+        .supports
+          width: 80%
+          margin: 0 auto 28px auto
+          .support-item
+            padding: 0 12px
+            margin-bottom: 12px
+            font-size: 0
+            &:last-child
+              margin-bottom: 0
+            .icon
+              vertical-align: top
+              margin-right: 6px
+            .text
+              font-size: $fontsize-small
+              line-height: $fontsize-large
+              font-weight: 200
+        .bulletin
+          width: 80%
+          margin: 0 auto
+          .content
+            line-height: 24px
+            font-size: $fontsize-small
+            padding: 0 12px
+    .detail-close
+      position: relative
+      width: 32px
+      height: 32px
+      margin: -64px auto 0 auto
+      clear: both
+      color: rgba(255, 255, 255, .5)
+      font-size: 32px
+</style>

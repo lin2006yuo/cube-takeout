@@ -1,25 +1,75 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <v-header :seller="seller"></v-header>
+    <div class="tab-wrapper">
+      <v-tab :tabs="tabs"></v-tab>
     </div>
-    <router-view/>
   </div>
 </template>
-<style lang="stylus">
-#app
-  font-family 'Avenir', Helvetica, Arial, sans-serif
-  -webkit-font-smoothing antialiased
-  -moz-osx-font-smoothing grayscale
-  text-align center
-  color #2c3e50
+<script>
+import VHeader from 'components/v-header/v-header'
+import VTab from 'components/tab/tab'
+import Goods from 'components/goods/goods'
+import Seller from 'components/seller/seller'
+import Ratings from 'components/ratings/ratings'
+import { getSeller } from './api'
 
-#nav
-  padding 30px
-  a
-    font-weight bold
-    color #2c3e50
-    &.router-link-exact-active
-      color #42b983
+export default {
+  name: 'app',
+  data() {
+    return {
+      seller: {}
+    }
+  },
+  computed: {
+    tabs() {
+      return [
+        {
+          label: '商品',
+          component: Goods,
+          data: {
+            seller: this.seller
+          }
+        },
+        {
+          label: '评价',
+          component: Ratings,
+          data: {
+            seller: this.seller
+          }
+        },
+        {
+          label: '商家',
+          component: Seller,
+          data: {
+            seller: this.seller
+          }
+        }
+      ]
+    }
+  },
+  created() {
+    this._getSeller()
+  },
+  methods: {
+    _getSeller() {
+      getSeller().then((seller) => {
+        this.seller = seller
+      })
+    }
+  },
+  components: {
+    VHeader,
+    VTab
+  }
+}
+</script>
+<style lang="stylus">
+  #app
+    .tab-wrapper
+      position fixed
+      top 136px
+      left: 0
+      right: 0
+      bottom: 0
 </style>
